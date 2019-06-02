@@ -24,6 +24,8 @@ if [[ "${branch}" != "master" ]]; then
   exit 1;
 fi
 
+verify_bump2version_installed
+
 type=${1}
 if [ -z "${type}" ]
 then
@@ -42,3 +44,13 @@ echo "Upgrading version from the current version of ${version}"
 bump2version --current-version ${version} --commit --tag --tag-name {new_version} ${type} ./setup.py
 git push --tags origin master
 echo "Done pushing to master"
+
+# Verify bump2version is installed
+verify_bump2version_installed()
+{
+  if [[ ! $(type -P bump2version) ]]; then
+    echo "bump2version not installed! Please see https://github.com/c4urself/bump2version#installation"
+    exit 1
+  fi
+}
+
